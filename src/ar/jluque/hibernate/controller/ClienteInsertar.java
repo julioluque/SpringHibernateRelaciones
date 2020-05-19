@@ -1,5 +1,7 @@
 package ar.jluque.hibernate.controller;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -7,12 +9,12 @@ import org.hibernate.cfg.Configuration;
 import ar.jluque.hibernate.dto.Cliente;
 import ar.jluque.hibernate.dto.DetallesCliente;
 
-public class ClienteController {
+public class ClienteInsertar {
 
 	public static void main(String[] args) {
 
-		Cliente cliente = new Cliente("Sofia", "Luque", "Amoreti 2234");
-		DetallesCliente detalles = new DetallesCliente("www.julio.com.ar", "115930293",
+		Cliente cliente = new Cliente("Brenda", "Luque", "Amoreti 2234");
+		DetallesCliente detalles = new DetallesCliente("www.brenda.com.ar", "115930293",
 				"Aca va la descripcion y comentarios");
 		
 		cliente.setDetallesCliente(detalles);
@@ -27,8 +29,16 @@ public class ClienteController {
 			ss.beginTransaction();
 			ss.save(cliente);
 			ss.getTransaction().commit();
+			System.out.println("Registros agregados a la BD. " + cliente.getNombre());
+
+			ss.beginTransaction();
+			System.out.println("<<<<<<<<<<< RECUPERANDO LISTADO");
+			List <Cliente> clienteList = ss.createQuery("from Cliente").getResultList();
+			for (Cliente c : clienteList) {
+				System.out.println(c);
+			}
+			ss.getTransaction().commit();
 			ss.close();
-			System.out.println("Registros agregados a la BD");
 
 		} catch (Exception e) {
 			System.out.println("XXX Error en la transaccion");
