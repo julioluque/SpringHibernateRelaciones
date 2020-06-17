@@ -1,10 +1,13 @@
 package ar.jluque.hibernate.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,6 +28,17 @@ public class DetallesCliente {
 	@Column(name = "DET_COMENTARIOS")
 	private String comentarios;
 
+	@OneToOne(mappedBy="detallesCliente", cascade=CascadeType.ALL)
+	@JoinColumn(name = "DET_ID")
+	private Cliente cliente;
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
 
 	public DetallesCliente() {
 		// TODO Auto-generated constructor stub

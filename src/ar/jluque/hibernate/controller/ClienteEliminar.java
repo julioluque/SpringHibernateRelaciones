@@ -20,33 +20,42 @@ public class ClienteEliminar {
 		Session ss = sf.openSession();
 
 		try {
-			ss.beginTransaction();
-			clienteDB = ss.get(Cliente.class, 5);
+			try {
+				
+				ss.beginTransaction();
+				clienteDB = ss.get(Cliente.class, 17);
+				if (clienteDB != null) {
+					System.out.println("Se eliminara el registro id: " + clienteDB.getId());
+					ss.delete(clienteDB);
+				} else {
+					System.out.println("No se encontro el registro ");
+				}
+				ss.getTransaction().commit();
 
-			if (clienteDB != null) {
-				System.out.println("Se eliminara el registro id: " + clienteDB.getId());
-				ss.delete(clienteDB);
-			} else {
-				System.out.println("No se encontro el registro ");
+				if (clienteDB != null) {
+					System.out.println("Registro elimando correctamente. Id: " + clienteDB.getId());
+				} else {
+					System.out.println("No se realizaron cambios en la base de datos...");
+				}
+				
+			} catch (Exception e) {
+				System.out.println("XXX Error en la transaccion...");
 			}
-			ss.getTransaction().commit();
+		
+			try {
 
-			if (clienteDB != null) {
-				System.out.println("Registro elimando correctamente. Id: " + clienteDB.getId());
-			} else {
-				System.out.println("No se realizaron cambios en la base de datos...");
+				ss.beginTransaction();
+				List<Cliente> clienteList = ss.createQuery("from Cliente").getResultList();
+				for (Cliente c : clienteList) {
+					System.out.println(c);
+				}
+				ss.getTransaction().commit();
+				
+			}catch(Exception e) {
+				e.printStackTrace();
 			}
-
-			ss.beginTransaction();
-			List<Cliente> clienteList = ss.createQuery("from Cliente").getResultList();
-			for (Cliente c : clienteList) {
-				System.out.println(c);
-			}
-			ss.getTransaction().commit();
-
-		} catch (Exception e) {
-			System.out.println("XXX Error en la transaccion...");
-		} finally {
+			
+		}finally {
 			ss.close();
 			sf.close();
 		}
